@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Netx.Properties
+namespace WebsocketNetTool.Properties
 {
 
 
