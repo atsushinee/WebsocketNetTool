@@ -13,6 +13,10 @@ namespace WebsocketNetTool.Base
     
         public abstract void InitEvents();
 
-      
+        public async void GetIpv4AddrListHandler(Action<List<string>> onGetResult, bool showLocal = true)
+        {
+            var result = await CommonUtil.GetIpv4AddrListAsync(showLocal);
+            onGetResult(result);
+        }
     }
 }
