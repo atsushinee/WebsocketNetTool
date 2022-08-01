@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <Style x:Key="CustomColumnHeaderContainerStyle" TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="Visibility" Value="Collapsed"/>
                 <!-- set margin and padding zero px -->
