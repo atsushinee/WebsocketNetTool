@@ -9,7 +9,7 @@ using System.Windows.Input;
 namespace WebsocketNetTool.WebSocket
 {
     /// <summary>
-    /// WebsocketServer.xaml 的交互逻辑
+    /// WebsocketClient.xaml 的交互逻辑
     /// </summary>
     public partial class WebsocketClientWindow : BaseWindow
     {
