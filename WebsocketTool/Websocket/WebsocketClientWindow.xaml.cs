@@ -25,7 +25,7 @@ namespace WebsocketNetTool.WebSocket
             InitEvents();
         }
 
-        private void WebsocketServerWindow_Loaded(object sender, RoutedEventArgs e)
+        private void WebsocketClientWindow_Loaded(object sender, RoutedEventArgs e)
         {
             GetIpv4AddrListHandler((addrList) =>
             {
@@ -36,7 +36,7 @@ namespace WebsocketNetTool.WebSocket
 
         public override void InitEvents()
         {
-            Loaded += WebsocketServerWindow_Loaded;
+            Loaded += WebsocketClientWindow_Loaded;
             Closed += WebsocketClientWindow_Closed;
             
             BtnControlConn.Click += BtnControlConn_Click;
