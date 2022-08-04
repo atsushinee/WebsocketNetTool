@@ -62,6 +62,7 @@
                     </StackPanel>
                 </GroupBox>
             </Grid>
+            
             <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="4">
                 <GroupBox Header="会话窗口" Margin="5">
                     <Grid>
