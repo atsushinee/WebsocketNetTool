@@ -100,7 +100,7 @@ namespace WebsocketNetTool.WebSocket
                 socketClient.Error += SocketClient_Error;
                 socketClient.Opened += SocketClient_Opened;
                 socketClient.Open();
-                AppendInfo($">>正在连接[{url}]，请等待...");
+                AppendInfo($"正在连接[{url}]，请等待...");
             }
             catch (Exception e)
             {
