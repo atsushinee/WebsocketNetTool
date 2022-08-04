@@ -129,7 +129,7 @@ namespace WebsocketNetTool.WebSocket
 
         private void SocketClient_Error(object sender, ErrorEventArgs e)
         {
-            AppendInfo($"【连接】: 服务连接错误>>{e.Exception.Message}");
+            AppendInfo($"【连接】: 服务连接错误:{e.Exception.Message}");
         }
 
         private void SocketClient_Closed(object sender, EventArgs e)
