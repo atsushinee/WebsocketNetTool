@@ -21,7 +21,9 @@
                     <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" FontFamily="微软雅黑" FontSize="15" Padding="10" x:Name="TextMessage" TextWrapping="Wrap"></TextBlock>
+                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" 
+                    FontFamily="微软雅黑" FontSize="15" Padding="10" x:Name="TextMessage" TextWrapping="Wrap">
+                    </TextBlock>
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
