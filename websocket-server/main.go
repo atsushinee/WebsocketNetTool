@@ -8,6 +8,7 @@ import (
 
 func main() {
 	const url = "ws://192.168.0.116:9009"
+	
 	dial, err := websocket.Dial(url, "ws", url)
 	if err != nil {
 		panic(err)
