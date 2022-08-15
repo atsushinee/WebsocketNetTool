@@ -13,6 +13,5 @@ namespace WebsocketNetTool
     /// </summary>
     public partial class App : Application
     {
-    
     }
 }
