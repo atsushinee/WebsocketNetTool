@@ -20,8 +20,8 @@ func main() {
 	}
 }
 
-// run initializes the chatServer and then
-// starts a http.Server for the passed in address.
+
+
 func run() error {
 	if len(os.Args) < 2 {
 		return errors.New("please provide an address to listen on as the first argument")
@@ -31,7 +31,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	log.Printf("listening on http://%v", l.Addr())
+	log.Printf("listening on http:
 
 	cs := newChatServer()
 	s := &http.Server{

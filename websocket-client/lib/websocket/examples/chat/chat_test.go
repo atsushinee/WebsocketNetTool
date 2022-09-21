@@ -20,9 +20,6 @@ import (
 func Test_chatServer(t *testing.T) {
 	t.Parallel()
 
-	// This is a simple echo test with a single client.
-	// The client sends a message and ensures it receives
-	// it on its WebSocket.
 	t.Run("simple", func(t *testing.T) {
 		t.Parallel()
 
@@ -48,12 +45,6 @@ func Test_chatServer(t *testing.T) {
 		}
 	})
 
-	// This test is a complex concurrency test.
-	// 10 clients are started that send 128 different
-	// messages of max 128 bytes concurrently.
-	//
-	// The test verifies that every message is seen by ever client
-	// and no errors occur anywhere.
 	t.Run("concurrency", func(t *testing.T) {
 		t.Parallel()
 
