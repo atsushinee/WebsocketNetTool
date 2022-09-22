@@ -104,18 +104,18 @@ func Test_chatServer(t *testing.T) {
 	})
 }
 
-// setupTest sets up chatServer that can be used
-// via the returned url.
-//
-// Defer closeFn to ensure everything is cleaned up at
-// the end of the test.
-//
-// chatServer logs will be logged via t.Logf.
+
+
+
+
+
+
+
 func setupTest(t *testing.T) (url string, closeFn func()) {
 	cs := newChatServer()
 	cs.logf = t.Logf
 
-	// To ensure tests run quickly under even -race.
+	
 	cs.subscriberMessageBuffer = 4096
 	cs.publishLimiter.SetLimit(rate.Inf)
 
@@ -125,8 +125,8 @@ func setupTest(t *testing.T) (url string, closeFn func()) {
 	}
 }
 
-// testAllMessagesReceived ensures that after n reads, all msgs in msgs
-// have been read.
+
+
 func testAllMessagesReceived(cl *client, n int, msgs map[string]struct{}) error {
 	msgs = cloneMessages(msgs)
 
@@ -237,7 +237,7 @@ func (cl *client) Close() error {
 	return cl.c.Close(websocket.StatusNormalClosure, "")
 }
 
-// randString generates a random string with length n.
+
 func randString(n int) string {
 	b := make([]byte, n)
 	_, err := rand.Reader.Read(b)
@@ -251,14 +251,14 @@ func randString(n int) string {
 		return s[:n]
 	}
 	if len(s) < n {
-		// Pad with =
+		
 		extra := n - len(s)
 		return s + strings.Repeat("=", extra)
 	}
 	return s
 }
 
-// randInt returns a randomly generated integer between [0, max).
+
 func randInt(max int) int {
 	x, err := rand.Int(rand.Reader, big.NewInt(int64(max)))
 	if err != nil {

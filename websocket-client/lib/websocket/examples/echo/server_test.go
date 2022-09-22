@@ -10,8 +10,8 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-// Test_echoServer tests the echoServer by sending it 5 different messages
-// and ensuring the responses all match.
+
+
 func Test_echoServer(t *testing.T) {
 	t.Parallel()
 
