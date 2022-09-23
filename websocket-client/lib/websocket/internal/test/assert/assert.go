@@ -11,14 +11,14 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
-// Diff returns a human readable diff between v1 and v2
+
 func Diff(v1, v2 interface{}) string {
 	return cmp.Diff(v1, v2, cmpopts.EquateErrors(), cmp.Exporter(func(r reflect.Type) bool {
 		return true
 	}), cmp.Comparer(proto.Equal))
 }
 
-// Equal asserts exp == act.
+
 func Equal(t testing.TB, name string, exp, act interface{}) {
 	t.Helper()
 
@@ -27,7 +27,7 @@ func Equal(t testing.TB, name string, exp, act interface{}) {
 	}
 }
 
-// Success asserts err == nil.
+
 func Success(t testing.TB, err error) {
 	t.Helper()
 
@@ -36,7 +36,7 @@ func Success(t testing.TB, err error) {
 	}
 }
 
-// Error asserts err != nil.
+
 func Error(t testing.TB, err error) {
 	t.Helper()
 
@@ -45,7 +45,7 @@ func Error(t testing.TB, err error) {
 	}
 }
 
-// Contains asserts the fmt.Sprint(v) contains sub.
+
 func Contains(t testing.TB, v interface{}, sub string) {
 	t.Helper()
 
