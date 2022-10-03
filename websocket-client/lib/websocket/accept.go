@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -19,57 +19,57 @@ import (
 	"nhooyr.io/websocket/internal/errd"
 )
 
-// AcceptOptions represents Accept's options.
+
 type AcceptOptions struct {
-	// Subprotocols lists the WebSocket subprotocols that Accept will negotiate with the client.
-	// The empty subprotocol will always be negotiated as per RFC 6455. If you would like to
-	// reject it, close the connection when c.Subprotocol() == "".
+	
+	
+	
 	Subprotocols []string
 
-	// InsecureSkipVerify is used to disable Accept's origin verification behaviour.
-	//
-	// You probably want to use OriginPatterns instead.
+	
+	
+	
 	InsecureSkipVerify bool
 
-	// OriginPatterns lists the host patterns for authorized origins.
-	// The request host is always authorized.
-	// Use this to enable cross origin WebSockets.
-	//
-	// i.e javascript running on example.com wants to access a WebSocket server at chat.example.com.
-	// In such a case, example.com is the origin and chat.example.com is the request host.
-	// One would set this field to []string{"example.com"} to authorize example.com to connect.
-	//
-	// Each pattern is matched case insensitively against the request origin host
-	// with filepath.Match.
-	// See https://golang.org/pkg/path/filepath/#Match
-	//
-	// Please ensure you understand the ramifications of enabling this.
-	// If used incorrectly your WebSocket server will be open to CSRF attacks.
-	//
-	// Do not use * as a pattern to allow any origin, prefer to use InsecureSkipVerify instead
-	// to bring attention to the danger of such a setting.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	OriginPatterns []string
 
-	// CompressionMode controls the compression mode.
-	// Defaults to CompressionNoContextTakeover.
-	//
-	// See docs on CompressionMode for details.
+	
+	
+	
+	
 	CompressionMode CompressionMode
 
-	// CompressionThreshold controls the minimum size of a message before compression is applied.
-	//
-	// Defaults to 512 bytes for CompressionNoContextTakeover and 128 bytes
-	// for CompressionContextTakeover.
+	
+	
+	
+	
 	CompressionThreshold int
 }
 
-// Accept accepts a WebSocket handshake from a client and upgrades the
-// the connection to a WebSocket.
-//
-// Accept will not allow cross origin requests by default.
-// See the InsecureSkipVerify and OriginPatterns options to allow cross origin requests.
-//
-// Accept will write a response to w on all errors.
+
+
+
+
+
+
+
 func Accept(w http.ResponseWriter, r *http.Request, opts *AcceptOptions) (*Conn, error) {
 	return accept(w, r, opts)
 }
@@ -124,7 +124,7 @@ func accept(w http.ResponseWriter, r *http.Request, opts *AcceptOptions) (_ *Con
 	}
 
 	w.WriteHeader(http.StatusSwitchingProtocols)
-	// See https://github.com/nhooyr/websocket/issues/166
+	
 	if ginWriter, ok := w.(interface {
 		WriteHeaderNow()
 	}); ok {
@@ -138,7 +138,7 @@ func accept(w http.ResponseWriter, r *http.Request, opts *AcceptOptions) (_ *Con
 		return nil, err
 	}
 
-	// https://github.com/golang/go/issues/32314
+	
 	b, _ := brw.Reader.Peek(brw.Reader.Buffered())
 	brw.Reader.Reset(io.MultiReader(bytes.NewReader(b), netConn))
 
@@ -239,9 +239,9 @@ func acceptCompression(r *http.Request, w http.ResponseWriter, mode CompressionM
 		switch ext.name {
 		case "permessage-deflate":
 			return acceptDeflate(w, ext, mode)
-			// Disabled for now, see https://github.com/nhooyr/websocket/issues/218
-			// case "x-webkit-deflate-frame":
-			// 	return acceptWebkitDeflate(w, ext, mode)
+			
+			
+			
 		}
 	}
 	return nil, nil
@@ -261,7 +261,7 @@ func acceptDeflate(w http.ResponseWriter, ext websocketExtension, mode Compressi
 		}
 
 		if strings.HasPrefix(p, "client_max_window_bits") {
-			// We cannot adjust the read sliding window so cannot make use of this.
+			
 			continue
 		}
 
@@ -277,7 +277,7 @@ func acceptDeflate(w http.ResponseWriter, ext websocketExtension, mode Compressi
 
 func acceptWebkitDeflate(w http.ResponseWriter, ext websocketExtension, mode CompressionMode) (*compressionOptions, error) {
 	copts := mode.opts()
-	// The peer must explicitly request it.
+	
 	copts.serverNoContextTakeover = false
 
 	for _, p := range ext.params {
@@ -286,15 +286,15 @@ func acceptWebkitDeflate(w http.ResponseWriter, ext websocketExtension, mode Com
 			continue
 		}
 
-		// We explicitly fail on x-webkit-deflate-frame's max_window_bits parameter instead
-		// of ignoring it as the draft spec is unclear. It says the server can ignore it
-		// but the server has no way of signalling to the client it was ignored as the parameters
-		// are set one way.
-		// Thus us ignoring it would make the client think we understood it which would cause issues.
-		// See https://tools.ietf.org/html/draft-tyoshino-hybi-websocket-perframe-deflate-06#section-4.1
-		//
-		// Either way, we're only implementing this for webkit which never sends the max_window_bits
-		// parameter so we don't need to worry about it.
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		err := fmt.Errorf("unsupported x-webkit-deflate-frame parameter: %q", p)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return nil, err

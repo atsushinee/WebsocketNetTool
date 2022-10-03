@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket_test
 
@@ -22,13 +22,13 @@ import (
 )
 
 var excludedAutobahnCases = []string{
-	// We skip the UTF-8 handling tests as there isn't any reason to reject invalid UTF-8, just
-	// more performance overhead.
+	
+	
 	"6.*", "7.5.1",
 
-	// We skip the tests related to requestMaxWindowBits as that is unimplemented due
-	// to limitations in compress/flate. See https://github.com/golang/go/issues/3155
-	// Same with klauspost/compress which doesn't allow adjusting the sliding window size.
+	
+	
+	
 	"13.3.*", "13.4.*", "13.5.*", "13.6.*",
 }
 
@@ -98,7 +98,7 @@ func wstestClientServer(ctx context.Context) (url string, closeFn func(), err er
 		return "", nil, err
 	}
 
-	url = "ws://" + serverAddr
+	url = "ws:
 
 	specFile, err := tempJSONFile(map[string]interface{}{
 		"url":           url,
@@ -118,8 +118,8 @@ func wstestClientServer(ctx context.Context) (url string, closeFn func(), err er
 	}()
 
 	args := []string{"--mode", "fuzzingserver", "--spec", specFile,
-		// Disables some server that runs as part of fuzzingserver mode.
-		// See https://github.com/crossbario/autobahn-testsuite/blob/058db3a36b7c3a1edf68c282307c6b899ca4857f/autobahntestsuite/autobahntestsuite/wstest.py#L124
+		
+		
 		"--webport=0",
 	}
 	wstest := exec.CommandContext(ctx, "wstest", args...)
