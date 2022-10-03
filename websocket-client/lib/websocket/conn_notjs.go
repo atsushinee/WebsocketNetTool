@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -14,17 +14,17 @@ import (
 	"sync/atomic"
 )
 
-// Conn represents a WebSocket connection.
-// All methods may be called concurrently except for Reader and Read.
-//
-// You must always read from the connection. Otherwise control
-// frames will not be handled. See Reader and CloseRead.
-//
-// Be sure to call Close on the connection when you
-// are finished with it to release associated resources.
-//
-// On any error from any method, the connection is closed
-// with an appropriate reason.
+
+
+
+
+
+
+
+
+
+
+
 type Conn struct {
 	subprotocol    string
 	rwc            io.ReadWriteCloser
@@ -37,14 +37,14 @@ type Conn struct {
 	readTimeout  chan context.Context
 	writeTimeout chan context.Context
 
-	// Read state.
+	
 	readMu            *mu
 	readHeaderBuf     [8]byte
 	readControlBuf    [maxControlPayload]byte
 	msgReader         *msgReader
 	readCloseFrameErr error
 
-	// Write state.
+	
 	msgWriterState *msgWriterState
 	writeFrameMu   *mu
 	writeBuf       []byte
@@ -116,8 +116,8 @@ func newConn(cfg connConfig) *Conn {
 	return c
 }
 
-// Subprotocol returns the negotiated subprotocol.
-// An empty string means the default protocol.
+
+
 func (c *Conn) Subprotocol() string {
 	return c.subprotocol
 }
@@ -133,9 +133,9 @@ func (c *Conn) close(err error) {
 	close(c.closed)
 	runtime.SetFinalizer(c, nil)
 
-	// Have to close after c.closed is closed to ensure any goroutine that wakes up
-	// from the connection being closed also sees that c.closed is closed and returns
-	// closeErr.
+	
+	
+	
 	c.rwc.Close()
 
 	go func() {
@@ -171,13 +171,13 @@ func (c *Conn) flate() bool {
 	return c.copts != nil
 }
 
-// Ping sends a ping to the peer and waits for a pong.
-// Use this to measure latency or ensure the peer is responsive.
-// Ping must be called concurrently with Reader as it does
-// not read from the connection but instead waits for a Reader call
-// to read the pong.
-//
-// TCP Keepalives should suffice for most use cases.
+
+
+
+
+
+
+
 func (c *Conn) Ping(ctx context.Context) error {
 	p := atomic.AddInt32(&c.pingCounter, 1)
 
@@ -243,12 +243,12 @@ func (m *mu) lock(ctx context.Context) error {
 		m.c.close(err)
 		return err
 	case m.ch <- struct{}{}:
-		// To make sure the connection is certainly alive.
-		// As it's possible the send on m.ch was selected
-		// over the receive on closed.
+		
+		
+		
 		select {
 		case <-m.c.closed:
-			// Make sure to release.
+			
 			m.unlock()
 			return m.c.closeErr
 		default:
