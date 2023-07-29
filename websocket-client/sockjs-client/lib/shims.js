@@ -1,8 +1,4 @@
-/* eslint-disable */
-/* jscs: disable */
 'use strict';
-
-// pulled specific shims from https://github.com/es-shims/es5-shim
 
 var ArrayPrototype = Array.prototype;
 var ObjectPrototype = Object.prototype;
@@ -30,8 +26,6 @@ var supportsDescriptors = Object.defineProperty && (function () {
     }
 }());
 
-// Define configurable, writable and non-enumerable props
-// if they don't exist.
 var defineProperty;
 if (supportsDescriptors) {
     defineProperty = function (object, name, method, forceAssign) {
@@ -64,14 +58,6 @@ var toObject = function (o) {
     return Object(o);
 };
 
-//
-// Util
-// ======
-//
-
-// ES5 9.4
-// http://es5.github.com/#x9.4
-// http://jsperf.com/to-integer
 
 function toInteger(num) {
     var n = +num;
@@ -86,14 +72,6 @@ function toInteger(num) {
 function ToUint32(x) {
     return x >>> 0;
 }
-
-//
-// Function
-// ========
-//
-
-// ES-5 15.3.4.5
-// http://es5.github.com/#x15.3.4.5
 
 function Empty() {}
 
