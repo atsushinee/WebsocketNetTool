@@ -28,10 +28,10 @@ function InfoReceiver(baseUrl, urlInfo) {
 
 inherits(InfoReceiver, EventEmitter);
 
-// TODO this is currently ignoring the list of available transports and the whitelist
+
 
 InfoReceiver._getReceiver = function(baseUrl, url, urlInfo) {
-  // determine method of CORS support (if needed)
+  
   if (urlInfo.sameOrigin) {
     return new InfoAjax(url, XHRLocal);
   }
