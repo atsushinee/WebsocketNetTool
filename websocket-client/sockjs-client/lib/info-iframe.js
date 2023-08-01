@@ -43,7 +43,7 @@ function InfoIframe(baseUrl, url) {
     });
   };
 
-  // TODO this seems the same as the 'needBody' from transports
+  
   if (!global.document.body) {
     utils.attachEvent('load', go);
   } else {
