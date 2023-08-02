@@ -21,8 +21,8 @@ module.exports = function(SockJS, availableTransports) {
     }
   });
 
-  // hard-coded for the info iframe
-  // TODO see if we can make this more dynamic
+  
+  
   transportMap[InfoIframeReceiver.transportName] = InfoIframeReceiver;
   var parentOrigin;
 
@@ -67,7 +67,7 @@ module.exports = function(SockJS, availableTransports) {
         var transUrl = p[2];
         var baseUrl = p[3];
         debug(version, transport, transUrl, baseUrl);
-        // change this to semver logic
+        
         if (version !== SockJS.version) {
           throw new Error('Incompatible SockJS! Main site uses:' +
                     ' "' + version + '", the iframe:' +
@@ -95,7 +95,7 @@ module.exports = function(SockJS, availableTransports) {
 
     eventUtils.attachEvent('message', onMessage);
 
-    // Start
+    
     iframeUtils.postMessage('s');
   };
 };
