@@ -2,8 +2,8 @@
 
 var crypto = require('crypto');
 
-// This string has length 32, a power of 2, so the modulus doesn't introduce a
-// bias.
+
+
 var _randomStringChars = 'abcdefghijklmnopqrstuvwxyz012345';
 module.exports = {
   string: function(length) {
