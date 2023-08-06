@@ -4,7 +4,7 @@ var random = require('./random');
 
 var onUnload = {}
   , afterUnload = false
-    // detect google chrome packaged apps because they don't allow the 'unload' event
+    
   , isChromePackagedApp = global.chrome && global.chrome.app && global.chrome.app.runtime
   ;
 
@@ -13,11 +13,11 @@ module.exports = {
     if (typeof global.addEventListener !== 'undefined') {
       global.addEventListener(event, listener, false);
     } else if (global.document && global.attachEvent) {
-      // IE quirks.
-      // According to: http://stevesouders.com/misc/test-postmessage.php
-      // the message gets delivered only to 'document', not 'window'.
+      
+      
+      
       global.document.attachEvent('on' + event, listener);
-      // I get 'window' for ie8.
+      
       global.attachEvent('on' + event, listener);
     }
   }
@@ -66,8 +66,8 @@ var unloadTriggered = function() {
   module.exports.triggerUnloadCallbacks();
 };
 
-// 'unload' alone is not reliable in opera within an iframe, but we
-// can't use `beforeunload` as IE fires it on javascript: links.
+
+
 if (!isChromePackagedApp) {
   module.exports.attachEvent('unload', unloadTriggered);
 }

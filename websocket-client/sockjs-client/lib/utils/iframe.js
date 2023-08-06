@@ -37,11 +37,11 @@ module.exports = {
     var unattach = function() {
       debug('unattach');
       clearTimeout(tref);
-      // Explorer had problems with that.
+      
       try {
         iframe.onload = null;
       } catch (x) {
-        // intentionally empty
+        
       }
       iframe.onerror = null;
     };
@@ -49,9 +49,9 @@ module.exports = {
       debug('cleanup');
       if (iframe) {
         unattach();
-        // This timeout makes chrome fire onbeforeunload event
-        // within iframe. Without the timeout it goes straight to
-        // onunload.
+        
+        
+        
         setTimeout(function() {
           if (iframe) {
             iframe.parentNode.removeChild(iframe);
@@ -72,13 +72,13 @@ module.exports = {
       debug('post', msg, origin);
       setTimeout(function() {
         try {
-          // When the iframe is not loaded, IE raises an exception
-          // on 'contentWindow'.
+          
+          
           if (iframe && iframe.contentWindow) {
             iframe.contentWindow.postMessage(msg, origin);
           }
         } catch (x) {
-          // intentionally empty
+          
         }
       }, 0);
     };
@@ -91,8 +91,8 @@ module.exports = {
     };
     iframe.onload = function() {
       debug('onload');
-      // `onload` is triggered before scripts on the iframe are
-      // executed. Give it few seconds to actually load stuff.
+      
+      
       clearTimeout(tref);
       tref = setTimeout(function() {
         onerror('onload timeout');
@@ -138,15 +138,15 @@ module.exports = {
     };
     var post = function(msg, origin) {
       try {
-        // When the iframe is not loaded, IE raises an exception
-        // on 'contentWindow'.
+        
+        
         setTimeout(function() {
           if (iframe && iframe.contentWindow) {
               iframe.contentWindow.postMessage(msg, origin);
           }
         }, 0);
       } catch (x) {
-        // intentionally empty
+        
       }
     };
 
@@ -178,8 +178,8 @@ module.exports = {
 
 module.exports.iframeEnabled = false;
 if (global.document) {
-  // postMessage misbehaves in konqueror 4.6.5 - the messages are delivered with
-  // huge delay, or not at all.
+  
+  
   module.exports.iframeEnabled = (typeof global.postMessage === 'function' ||
     typeof global.postMessage === 'object') && (!browser.isKonqueror());
 }

@@ -7,7 +7,7 @@ var logObject = {};
   try {
     levelExists = global.console && global.console[level] && global.console[level].apply;
   } catch(e) {
-    // do nothing
+    
   }
 
   logObject[level] = levelExists ? function () {
