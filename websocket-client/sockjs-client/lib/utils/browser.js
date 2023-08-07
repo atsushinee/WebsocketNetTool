@@ -11,9 +11,9 @@ module.exports = {
       /konqueror/i.test(global.navigator.userAgent);
   }
 
-  // #187 wrap document.domain in try/catch because of WP8 from file:///
+  
 , hasDomain: function () {
-    // non-browser client always has a domain
+    
     if (!global.document) {
       return true;
     }
