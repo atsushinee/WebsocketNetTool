@@ -28,6 +28,6 @@ XhrPollingTransport.enabled = function(info) {
 };
 
 XhrPollingTransport.transportName = 'xhr-polling';
-XhrPollingTransport.roundTrips = 2; // preflight, ajax
+XhrPollingTransport.roundTrips = 2; 
 
 module.exports = XhrPollingTransport;
