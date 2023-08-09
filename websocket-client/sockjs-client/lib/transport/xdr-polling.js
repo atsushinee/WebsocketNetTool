@@ -18,6 +18,6 @@ inherits(XdrPollingTransport, AjaxBasedTransport);
 
 XdrPollingTransport.enabled = XdrStreamingTransport.enabled;
 XdrPollingTransport.transportName = 'xdr-polling';
-XdrPollingTransport.roundTrips = 2; // preflight, ajax
+XdrPollingTransport.roundTrips = 2; 
 
 module.exports = XdrPollingTransport;
