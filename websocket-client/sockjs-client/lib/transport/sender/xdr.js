@@ -12,9 +12,9 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:sender:xdr');
 }
 
-// References:
-//   http://ajaxian.com/archives/100-line-ajax-wrapper
-//   http://msdn.microsoft.com/en-us/library/cc288060(v=VS.85).aspx
+
+
+
 
 function XDRObject(method, url, payload) {
   debug(method, url);
@@ -32,7 +32,7 @@ XDRObject.prototype._start = function(method, url, payload) {
   debug('_start');
   var self = this;
   var xdr = new global.XDomainRequest();
-  // IE caches even POSTs
+  
   url = urlUtils.addQuery(url, 't=' + (+new Date()));
 
   xdr.onerror = function() {
@@ -57,7 +57,7 @@ XDRObject.prototype._start = function(method, url, payload) {
     self._cleanup(true);
   });
   try {
-    // Fails with AccessDenied if port number is bogus
+    
     this.xdr.open(method, url);
     if (this.timeout) {
       this.xdr.timeout = this.timeout;
@@ -86,7 +86,7 @@ XDRObject.prototype._cleanup = function(abort) {
     try {
       this.xdr.abort();
     } catch (x) {
-      // intentionally empty
+      
     }
   }
   this.unloadRef = this.xdr = null;
@@ -97,7 +97,7 @@ XDRObject.prototype.close = function() {
   this._cleanup(true);
 };
 
-// IE 8/9 if the request target uses the same scheme - #79
+
 XDRObject.enabled = !!(global.XDomainRequest && browser.hasDomain());
 
 module.exports = XDRObject;
