@@ -26,7 +26,7 @@ function JsonpReceiver(url) {
   global[utils.WPrefix][this.id] = this._callback.bind(this);
   this._createScript(urlWithId);
 
-  // Fallback mostly for Konqueror - stupid timer, 35 seconds shall be plenty.
+  
   this.timeoutId = setTimeout(function() {
     debug('timeout');
     self._abort(new Error('JSONP script loaded abnormally (timeout)'));
@@ -80,8 +80,8 @@ JsonpReceiver.prototype._cleanup = function() {
   }
   if (this.script) {
     var script = this.script;
-    // Unfortunately, you can't really abort script loading of
-    // the script.
+    
+    
     script.parentNode.removeChild(script);
     script.onreadystatechange = script.onerror =
         script.onload = script.onclick = null;
@@ -108,7 +108,7 @@ JsonpReceiver.prototype._createScript = function(url) {
   debug('_createScript', url);
   var self = this;
   var script = this.script = global.document.createElement('script');
-  var script2;  // Opera synchronous load trick.
+  var script2;  
 
   script.id = 'a' + random.string(8);
   script.src = url;
@@ -120,18 +120,18 @@ JsonpReceiver.prototype._createScript = function(url) {
     self._abort(new Error('JSONP script loaded abnormally (onload)'));
   };
 
-  // IE9 fires 'error' event after onreadystatechange or before, in random order.
-  // Use loadedOkay to determine if actually errored
+  
+  
   script.onreadystatechange = function() {
     debug('onreadystatechange', script.readyState);
     if (/loaded|closed/.test(script.readyState)) {
       if (script && script.htmlFor && script.onclick) {
         self.loadedOkay = true;
         try {
-          // In IE, actually execute the script.
+          
           script.onclick();
         } catch (x) {
-          // intentionally empty
+          
         }
       }
       if (script) {
@@ -139,31 +139,31 @@ JsonpReceiver.prototype._createScript = function(url) {
       }
     }
   };
-  // IE: event/htmlFor/onclick trick.
-  // One can't rely on proper order for onreadystatechange. In order to
-  // make sure, set a 'htmlFor' and 'event' properties, so that
-  // script code will be installed as 'onclick' handler for the
-  // script object. Later, onreadystatechange, manually execute this
-  // code. FF and Chrome doesn't work with 'event' and 'htmlFor'
-  // set. For reference see:
-  //   http://jaubourg.net/2010/07/loading-script-as-onclick-handler-of.html
-  // Also, read on that about script ordering:
-  //   http://wiki.whatwg.org/wiki/Dynamic_Script_Execution_Order
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   if (typeof script.async === 'undefined' && global.document.attachEvent) {
-    // According to mozilla docs, in recent browsers script.async defaults
-    // to 'true', so we may use it to detect a good browser:
-    // https://developer.mozilla.org/en/HTML/Element/script
+    
+    
+    
     if (!browser.isOpera()) {
-      // Naively assume we're in IE
+      
       try {
         script.htmlFor = script.id;
         script.event = 'onclick';
       } catch (x) {
-        // intentionally empty
+        
       }
       script.async = true;
     } else {
-      // Opera, second sync script hack
+      
       script2 = this.script2 = global.document.createElement('script');
       script2.text = "try{var a = document.getElementById('" + script.id + "'); if(a)a.onerror();}catch(x){};";
       script.async = script2.async = false;
