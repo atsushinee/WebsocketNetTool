@@ -72,13 +72,13 @@ HtmlfileReceiver.prototype._close = function(reason) {
 
 HtmlfileReceiver.htmlfileEnabled = false;
 
-// obfuscate to avoid firewalls
+
 var axo = ['Active'].concat('Object').join('X');
 if (axo in global) {
   try {
     HtmlfileReceiver.htmlfileEnabled = !!new global[axo]('htmlfile');
   } catch (x) {
-    // intentionally empty
+    
   }
 }
 

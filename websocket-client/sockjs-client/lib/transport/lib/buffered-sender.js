@@ -27,14 +27,14 @@ BufferedSender.prototype.send = function(message) {
   }
 };
 
-// For polling transports in a situation when in the message callback,
-// new message is being send. If the sending connection was started
-// before receiving one, it is possible to saturate the network and
-// timeout due to the lack of receiving socket. To avoid that we delay
-// sending messages by some small time, in order to let receiving
-// connection be started beforehand. This is only a halfmeasure and
-// does not fix the big problem, but it does make the tests go more
-// stable on slow networks.
+
+
+
+
+
+
+
+
 BufferedSender.prototype.sendScheduleWait = function() {
   debug('sendScheduleWait');
   var self = this;

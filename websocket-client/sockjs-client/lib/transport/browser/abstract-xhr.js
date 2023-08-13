@@ -30,7 +30,7 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
   try {
     this.xhr = new XHR();
   } catch (x) {
-    // intentionally empty
+    
   }
 
   if (!this.xhr) {
@@ -40,11 +40,11 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
     return;
   }
 
-  // several browsers cache POSTs
+  
   url = urlUtils.addQuery(url, 't=' + (+new Date()));
 
-  // Explorer tends to keep connection open, even after the
-  // tab gets closed: http://bugs.jquery.com/ticket/5280
+  
+  
   this.unloadRef = utils.unloadAdd(function() {
     debug('unload cleanup');
     self._cleanup(true);
@@ -61,7 +61,7 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
     }
   } catch (e) {
     debug('exception', e);
-    // IE raises an exception on wrong port.
+    
     this.emit('finish', 0, '');
     this._cleanup(false);
     return;
@@ -69,8 +69,8 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
 
   if ((!opts || !opts.noCredentials) && AbstractXHRObject.supportsCORS) {
     debug('withCredentials');
-    // Mozilla docs says https://developer.mozilla.org/en/XMLHttpRequest :
-    // "This never affects same-site requests."
+    
+    
 
     this.xhr.withCredentials = true;
   }
@@ -87,21 +87,21 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
       debug('readyState', x.readyState);
       switch (x.readyState) {
       case 3:
-        // IE doesn't like peeking into responseText or status
-        // on Microsoft.XMLHTTP and readystate=3
+        
+        
         try {
           status = x.status;
           text = x.responseText;
         } catch (e) {
-          // intentionally empty
+          
         }
         debug('status', status);
-        // IE returns 1223 for 204: http://bugs.jquery.com/ticket/1450
+        
         if (status === 1223) {
           status = 204;
         }
 
-        // IE does return readystate == 3 for 404 answers.
+        
         if (status === 200 && text && text.length > 0) {
           debug('chunk');
           self.emit('chunk', status, text);
@@ -110,12 +110,12 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
       case 4:
         status = x.status;
         debug('status', status);
-        // IE returns 1223 for 204: http://bugs.jquery.com/ticket/1450
+        
         if (status === 1223) {
           status = 204;
         }
-        // IE returns this for a bad port
-        // http://msdn.microsoft.com/en-us/library/windows/desktop/aa383770(v=vs.85).aspx
+        
+        
         if (status === 12005 || status === 12029) {
           status = 0;
         }
@@ -144,7 +144,7 @@ AbstractXHRObject.prototype._cleanup = function(abort) {
   this.removeAllListeners();
   utils.unloadDel(this.unloadRef);
 
-  // IE needs this field to be a function
+  
   this.xhr.onreadystatechange = function() {};
   if (this.xhr.ontimeout) {
     this.xhr.ontimeout = null;
@@ -154,7 +154,7 @@ AbstractXHRObject.prototype._cleanup = function(abort) {
     try {
       this.xhr.abort();
     } catch (x) {
-      // intentionally empty
+      
     }
   }
   this.unloadRef = this.xhr = null;
@@ -166,8 +166,8 @@ AbstractXHRObject.prototype.close = function() {
 };
 
 AbstractXHRObject.enabled = !!XHR;
-// override XMLHttpRequest for IE6/7
-// obfuscate to avoid firewalls
+
+
 var axo = ['Active'].concat('Object').join('X');
 if (!AbstractXHRObject.enabled && (axo in global)) {
   debug('overriding xmlhttprequest');
@@ -185,7 +185,7 @@ var cors = false;
 try {
   cors = 'withCredentials' in new XHR();
 } catch (ignored) {
-  // intentionally empty
+  
 }
 
 AbstractXHRObject.supportsCORS = cors;

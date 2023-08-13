@@ -25,7 +25,7 @@ module.exports = function(transport) {
 
   IframeWrapTransport.transportName = 'iframe-' + transport.transportName;
   IframeWrapTransport.needBody = true;
-  IframeWrapTransport.roundTrips = IframeTransport.roundTrips + transport.roundTrips - 1; // html, javascript (2) + transport - no CORS (1)
+  IframeWrapTransport.roundTrips = IframeTransport.roundTrips + transport.roundTrips - 1; 
 
   IframeWrapTransport.facadeTransport = transport;
 

@@ -14,7 +14,7 @@ var form, area;
 function createIframe(id) {
   debug('createIframe', id);
   try {
-    // ie6 dynamic iframes with target="" support (thanks Chris Lambacher)
+    
     return global.document.createElement('<iframe name="' + id + '">');
   } catch (x) {
     var iframe = global.document.createElement('iframe');
@@ -56,7 +56,7 @@ module.exports = function(url, payload, callback) {
   try {
     area.value = payload;
   } catch (e) {
-    // seriously broken browsers get here
+    
   }
   form.submit();
 
@@ -66,16 +66,16 @@ module.exports = function(url, payload, callback) {
       return;
     }
     iframe.onreadystatechange = iframe.onerror = iframe.onload = null;
-    // Opera mini doesn't like if we GC iframe
-    // immediately, thus this timeout.
+    
+    
     setTimeout(function() {
       debug('cleaning up', id);
       iframe.parentNode.removeChild(iframe);
       iframe = null;
     }, 500);
     area.value = '';
-    // It is not possible to detect if the iframe succeeded or
-    // failed to submit our form.
+    
+    
     callback(err);
   };
   iframe.onerror = function() {
