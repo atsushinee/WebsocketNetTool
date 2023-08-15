@@ -40,7 +40,7 @@ EventEmitter.prototype.emit = function() {
   if (!listeners) {
     return;
   }
-  // equivalent of Array.prototype.slice.call(arguments, 1);
+  
   var l = arguments.length;
   var args = new Array(l - 1);
   for (var ai = 1; ai < l; ai++) {
