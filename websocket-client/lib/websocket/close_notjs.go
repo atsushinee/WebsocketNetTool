@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -13,20 +13,20 @@ import (
 	"nhooyr.io/websocket/internal/errd"
 )
 
-// Close performs the WebSocket close handshake with the given status code and reason.
+
 //
-// It will write a WebSocket close frame with a timeout of 5s and then wait 5s for
-// the peer to send a close frame.
-// All data messages received from the peer during the close handshake will be discarded.
+
+
+
 //
-// The connection can only be closed once. Additional calls to Close
-// are no-ops.
+
+
 //
-// The maximum length of reason must be 125 bytes. Avoid
-// sending a dynamic reason.
+
+
 //
-// Close will unblock all goroutines interacting with the connection once
-// complete.
+
+
 func (c *Conn) Close(code StatusCode, reason string) error {
 	return c.closeHandshake(code, reason)
 }
@@ -75,11 +75,11 @@ func (c *Conn) writeClose(code StatusCode, reason string) error {
 
 	writeErr := c.writeControl(context.Background(), opClose, p)
 	if CloseStatus(writeErr) != -1 {
-		// Not a real error if it's due to a close frame being received.
+		
 		writeErr = nil
 	}
 
-	// We do this after in case there was an error writing the close frame.
+	
 	c.setCloseErr(fmt.Errorf("sent close frame: %w", ce))
 
 	if marshalErr != nil {
@@ -142,8 +142,8 @@ func parseClosePayload(p []byte) (CloseError, error) {
 	return ce, nil
 }
 
-// See http://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
-// and https://tools.ietf.org/html/rfc6455#section-7.4.1
+
+
 func validWireCloseCode(code StatusCode) bool {
 	switch code {
 	case statusReserved, StatusNoStatusRcvd, StatusAbnormalClosure, StatusTLSHandshake:
