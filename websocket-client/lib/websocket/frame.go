@@ -11,15 +11,15 @@ import (
 	"nhooyr.io/websocket/internal/errd"
 )
 
-// opcode represents a WebSocket opcode.
+
 type opcode int
 
-// https://tools.ietf.org/html/rfc6455#section-11.8.
+
 const (
 	opContinuation opcode = iota
 	opText
 	opBinary
-	// 3 - 7 are reserved for further non-control frames.
+	
 	_
 	_
 	_
@@ -28,11 +28,11 @@ const (
 	opClose
 	opPing
 	opPong
-	// 11-16 are reserved for further control frames.
+	
 )
 
-// header represents a WebSocket frame header.
-// See https://tools.ietf.org/html/rfc6455#section-5.2.
+
+
 type header struct {
 	fin    bool
 	rsv1   bool
@@ -46,8 +46,8 @@ type header struct {
 	maskKey uint32
 }
 
-// readFrameHeader reads a header from the reader.
-// See https://tools.ietf.org/html/rfc6455#section-5.2.
+
+
 func readFrameHeader(r *bufio.Reader, readBuf []byte) (h header, err error) {
 	defer errd.Wrap(&err, "failed to read frame header")
 
@@ -100,12 +100,12 @@ func readFrameHeader(r *bufio.Reader, readBuf []byte) (h header, err error) {
 	return h, nil
 }
 
-// maxControlPayload is the maximum length of a control frame payload.
-// See https://tools.ietf.org/html/rfc6455#section-5.5.
+
+
 const maxControlPayload = 125
 
-// writeFrameHeader writes the bytes of the header to w.
-// See https://tools.ietf.org/html/rfc6455#section-5.2
+
+
 func writeFrameHeader(h header, w *bufio.Writer, buf []byte) (err error) {
 	defer errd.Wrap(&err, "failed to write frame header")
 
@@ -171,25 +171,25 @@ func writeFrameHeader(h header, w *bufio.Writer, buf []byte) (err error) {
 	return nil
 }
 
-// mask applies the WebSocket masking algorithm to p
-// with the given key.
-// See https://tools.ietf.org/html/rfc6455#section-5.3
+
+
+
 //
-// The returned value is the correctly rotated key to
-// to continue to mask/unmask the message.
+
+
 //
-// It is optimized for LittleEndian and expects the key
-// to be in little endian.
+
+
 //
-// See https://github.com/golang/go/issues/31586
+
 func mask(key uint32, b []byte) uint32 {
 	if len(b) >= 8 {
 		key64 := uint64(key)<<32 | uint64(key)
 
-		// At some point in the future we can clean these unrolled loops up.
-		// See https://github.com/golang/go/issues/31586#issuecomment-487436401
+		
+		
 
-		// Then we xor until b is less than 128 bytes.
+		
 		for len(b) >= 128 {
 			v := binary.LittleEndian.Uint64(b)
 			binary.LittleEndian.PutUint64(b, v^key64)
@@ -226,7 +226,7 @@ func mask(key uint32, b []byte) uint32 {
 			b = b[128:]
 		}
 
-		// Then we xor until b is less than 64 bytes.
+		
 		for len(b) >= 64 {
 			v := binary.LittleEndian.Uint64(b)
 			binary.LittleEndian.PutUint64(b, v^key64)
@@ -247,7 +247,7 @@ func mask(key uint32, b []byte) uint32 {
 			b = b[64:]
 		}
 
-		// Then we xor until b is less than 32 bytes.
+		
 		for len(b) >= 32 {
 			v := binary.LittleEndian.Uint64(b)
 			binary.LittleEndian.PutUint64(b, v^key64)
@@ -260,7 +260,7 @@ func mask(key uint32, b []byte) uint32 {
 			b = b[32:]
 		}
 
-		// Then we xor until b is less than 16 bytes.
+		
 		for len(b) >= 16 {
 			v := binary.LittleEndian.Uint64(b)
 			binary.LittleEndian.PutUint64(b, v^key64)
@@ -269,7 +269,7 @@ func mask(key uint32, b []byte) uint32 {
 			b = b[16:]
 		}
 
-		// Then we xor until b is less than 8 bytes.
+		
 		for len(b) >= 8 {
 			v := binary.LittleEndian.Uint64(b)
 			binary.LittleEndian.PutUint64(b, v^key64)
@@ -277,14 +277,14 @@ func mask(key uint32, b []byte) uint32 {
 		}
 	}
 
-	// Then we xor until b is less than 4 bytes.
+	
 	for len(b) >= 4 {
 		v := binary.LittleEndian.Uint32(b)
 		binary.LittleEndian.PutUint32(b, v^key)
 		b = b[4:]
 	}
 
-	// xor remaining bytes.
+	
 	for i := range b {
 		b[i] ^= byte(key)
 		key = bits.RotateLeft32(key, -8)
