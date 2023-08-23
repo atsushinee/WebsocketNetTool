@@ -1,5 +1,5 @@
-// Package wsjson provides helpers for reading and writing JSON messages.
-package wsjson // import "nhooyr.io/websocket/wsjson"
+
+package wsjson 
 
 import (
 	"context"
@@ -11,8 +11,8 @@ import (
 	"nhooyr.io/websocket/internal/errd"
 )
 
-// Read reads a JSON message from c into v.
-// It will reuse buffers in between calls to avoid allocations.
+
+
 func Read(ctx context.Context, c *websocket.Conn, v interface{}) error {
 	return read(ctx, c, v)
 }
@@ -42,8 +42,8 @@ func read(ctx context.Context, c *websocket.Conn, v interface{}) (err error) {
 	return nil
 }
 
-// Write writes the JSON message v to c.
-// It will reuse buffers in between calls to avoid allocations.
+
+
 func Write(ctx context.Context, c *websocket.Conn, v interface{}) error {
 	return write(ctx, c, v)
 }
@@ -56,8 +56,8 @@ func write(ctx context.Context, c *websocket.Conn, v interface{}) (err error) {
 		return err
 	}
 
-	// json.Marshal cannot reuse buffers between calls as it has to return
-	// a copy of the byte slice but Encoder does as it directly writes to w.
+	
+	
 	err = json.NewEncoder(w).Encode(v)
 	if err != nil {
 		return fmt.Errorf("failed to marshal JSON: %w", err)
