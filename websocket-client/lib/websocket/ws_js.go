@@ -1,4 +1,4 @@
-package websocket // import "nhooyr.io/websocket"
+package websocket 
 
 import (
 	"bytes"
@@ -18,11 +18,11 @@ import (
 	"nhooyr.io/websocket/internal/xsync"
 )
 
-// Conn provides a wrapper around the browser WebSocket API.
+
 type Conn struct {
 	ws wsjs.WebSocket
 
-	// read limit for a message in bytes.
+	
 	msgReadLimit xsync.Int64
 
 	closingMu     sync.Mutex
@@ -65,9 +65,9 @@ func (c *Conn) init() {
 			Code:   StatusCode(e.Code),
 			Reason: e.Reason,
 		}
-		// We do not know if we sent or received this close as
-		// its possible the browser triggered it without us
-		// explicitly sending it.
+		
+		
+		
 		c.close(err, e.WasClean)
 
 		c.releaseOnClose()
@@ -80,7 +80,7 @@ func (c *Conn) init() {
 
 		c.readBuf = append(c.readBuf, e)
 
-		// Lets the read goroutine know there is definitely something in readBuf.
+		
 		select {
 		case c.readSignal <- struct{}{}:
 		default:
@@ -97,8 +97,8 @@ func (c *Conn) closeWithInternal() {
 	c.Close(StatusInternalError, "something went wrong")
 }
 
-// Read attempts to read a message from the connection.
-// The maximum time spent waiting is bounded by the context.
+
+
 func (c *Conn) Read(ctx context.Context) (MessageType, []byte, error) {
 	if c.isReadClosed.Load() == 1 {
 		return 0, nil, errors.New("WebSocket connection read closed")
@@ -130,13 +130,13 @@ func (c *Conn) read(ctx context.Context) (MessageType, []byte, error) {
 	defer c.readBufMu.Unlock()
 
 	me := c.readBuf[0]
-	// We copy the messages forward and decrease the size
-	// of the slice to avoid reallocating.
+	
+	
 	copy(c.readBuf, c.readBuf[1:])
 	c.readBuf = c.readBuf[:len(c.readBuf)-1]
 
 	if len(c.readBuf) > 0 {
-		// Next time we read, we'll grab the message.
+		
 		select {
 		case c.readSignal <- struct{}{}:
 		default:
@@ -153,20 +153,20 @@ func (c *Conn) read(ctx context.Context) (MessageType, []byte, error) {
 	}
 }
 
-// Ping is mocked out for Wasm.
+
 func (c *Conn) Ping(ctx context.Context) error {
 	return nil
 }
 
-// Write writes a message of the given type to the connection.
-// Always non blocking.
+
+
 func (c *Conn) Write(ctx context.Context, typ MessageType, p []byte) error {
 	err := c.write(ctx, typ, p)
 	if err != nil {
-		// Have to ensure the WebSocket is closed after a write error
-		// to match the Go API. It can only error if the message type
-		// is unexpected or the passed bytes contain invalid UTF-8 for
-		// MessageText.
+		
+		
+		
+		
 		err := fmt.Errorf("failed to write: %w", err)
 		c.setCloseErr(err)
 		c.closeWithInternal()
@@ -189,10 +189,10 @@ func (c *Conn) write(ctx context.Context, typ MessageType, p []byte) error {
 	}
 }
 
-// Close closes the WebSocket with the given code and reason.
-// It will wait until the peer responds with a close frame
-// or the connection is closed.
-// It thus performs the full WebSocket close handshake.
+
+
+
+
 func (c *Conn) Close(code StatusCode, reason string) error {
 	err := c.exportedClose(code, reason)
 	if err != nil {
@@ -227,22 +227,22 @@ func (c *Conn) exportedClose(code StatusCode, reason string) error {
 	return nil
 }
 
-// Subprotocol returns the negotiated subprotocol.
-// An empty string means the default protocol.
+
+
 func (c *Conn) Subprotocol() string {
 	return c.ws.Subprotocol()
 }
 
-// DialOptions represents the options available to pass to Dial.
+
 type DialOptions struct {
-	// Subprotocols lists the subprotocols to negotiate with the server.
+	
 	Subprotocols []string
 }
 
-// Dial creates a new WebSocket connection to the given url with the given options.
-// The passed context bounds the maximum time spent waiting for the connection to open.
-// The returned *http.Response is always nil or a mock. It's only in the signature
-// to match the core API.
+
+
+
+
 func Dial(ctx context.Context, url string, opts *DialOptions) (*Conn, *http.Response, error) {
 	c, resp, err := dial(ctx, url, opts)
 	if err != nil {
@@ -288,8 +288,8 @@ func dial(ctx context.Context, url string, opts *DialOptions) (*Conn, *http.Resp
 	}
 }
 
-// Reader attempts to read a message from the connection.
-// The maximum time spent waiting is bounded by the context.
+
+
 func (c *Conn) Reader(ctx context.Context) (MessageType, io.Reader, error) {
 	typ, p, err := c.Read(ctx)
 	if err != nil {
@@ -298,9 +298,9 @@ func (c *Conn) Reader(ctx context.Context) (MessageType, io.Reader, error) {
 	return typ, bytes.NewReader(p), nil
 }
 
-// Writer returns a writer to write a WebSocket data message to the connection.
-// It buffers the entire message in memory and then sends it when the writer
-// is closed.
+
+
+
 func (c *Conn) Writer(ctx context.Context, typ MessageType) (io.WriteCloser, error) {
 	return writer{
 		c:   c,
@@ -345,7 +345,7 @@ func (w writer) Close() error {
 	return nil
 }
 
-// CloseRead implements *Conn.CloseRead for wasm.
+
 func (c *Conn) CloseRead(ctx context.Context) context.Context {
 	c.isReadClosed.Store(1)
 
@@ -358,7 +358,7 @@ func (c *Conn) CloseRead(ctx context.Context) context.Context {
 	return ctx
 }
 
-// SetReadLimit implements *Conn.SetReadLimit for wasm.
+
 func (c *Conn) SetReadLimit(n int64) {
 	c.msgReadLimit.Store(n)
 }
