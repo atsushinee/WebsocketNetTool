@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -17,13 +17,13 @@ import (
 	"nhooyr.io/websocket/internal/errd"
 )
 
-// Writer returns a writer bounded by the context that will write
-// a WebSocket message of type dataType to the connection.
+
+
 //
-// You must close the writer once you have written the entire message.
+
 //
-// Only one writer can be open at a time, multiple calls will block until the previous writer
-// is closed.
+
+
 func (c *Conn) Writer(ctx context.Context, typ MessageType) (io.WriteCloser, error) {
 	w, err := c.writer(ctx, typ)
 	if err != nil {
@@ -32,12 +32,12 @@ func (c *Conn) Writer(ctx context.Context, typ MessageType) (io.WriteCloser, err
 	return w, nil
 }
 
-// Write writes a message to the connection.
+
 //
-// See the Writer method if you want to stream a message.
+
 //
-// If compression is disabled or the threshold is not met, then it
-// will write the message in a single frame.
+
+
 func (c *Conn) Write(ctx context.Context, typ MessageType, p []byte) error {
 	_, err := c.write(ctx, typ, p)
 	if err != nil {
@@ -153,7 +153,7 @@ func (mw *msgWriterState) reset(ctx context.Context, typ MessageType) error {
 	return nil
 }
 
-// Write writes the given bytes to the WebSocket connection.
+
 func (mw *msgWriterState) Write(p []byte) (_ int, err error) {
 	err = mw.writeMu.lock(mw.ctx)
 	if err != nil {
@@ -169,8 +169,8 @@ func (mw *msgWriterState) Write(p []byte) (_ int, err error) {
 	}()
 
 	if mw.c.flate() {
-		// Only enables flate if the length crosses the
-		// threshold on the first frame
+		
+		
 		if mw.opcode != opContinuation && len(p) >= mw.c.flateThreshold {
 			mw.ensureFlate()
 		}
@@ -197,7 +197,7 @@ func (mw *msgWriterState) write(p []byte) (int, error) {
 	return n, nil
 }
 
-// Close flushes the frame to the connection.
+
 func (mw *msgWriterState) Close() (err error) {
 	defer errd.Wrap(&err, "failed to close writer")
 
@@ -240,7 +240,7 @@ func (c *Conn) writeControl(ctx context.Context, opcode opcode, p []byte) error 
 	return nil
 }
 
-// frame handles all writes to the connection.
+
 func (c *Conn) writeFrame(ctx context.Context, fin bool, flate bool, opcode opcode, p []byte) (_ int, err error) {
 	err = c.writeFrameMu.lock(ctx)
 	if err != nil {
@@ -248,11 +248,11 @@ func (c *Conn) writeFrame(ctx context.Context, fin bool, flate bool, opcode opco
 	}
 	defer c.writeFrameMu.unlock()
 
-	// If the state says a close has already been written, we wait until
-	// the connection is closed and return that error.
+	
+	
 	//
-	// However, if the frame being written is a close, that means its the close from
-	// the state being set so we let it go through.
+	
+	
 	c.closeMu.Lock()
 	wroteClose := c.wroteClose
 	c.closeMu.Unlock()
@@ -337,7 +337,7 @@ func (c *Conn) writeFramePayload(p []byte) (n int, err error) {
 
 	maskKey := c.writeHeader.maskKey
 	for len(p) > 0 {
-		// If the buffer is full, we need to flush.
+		
 		if c.bw.Available() == 0 {
 			err = c.bw.Flush()
 			if err != nil {
@@ -345,7 +345,7 @@ func (c *Conn) writeFramePayload(p []byte) (n int, err error) {
 			}
 		}
 
-		// Start of next write in the buffer.
+		
 		i := c.bw.Buffered()
 
 		j := len(p)
@@ -373,8 +373,8 @@ func (f writerFunc) Write(p []byte) (int, error) {
 	return f(p)
 }
 
-// extractBufioWriterBuf grabs the []byte backing a *bufio.Writer
-// and returns it.
+
+
 func extractBufioWriterBuf(bw *bufio.Writer, w io.Writer) []byte {
 	var writeBuf []byte
 	bw.Reset(writerFunc(func(p2 []byte) (int, error) {
