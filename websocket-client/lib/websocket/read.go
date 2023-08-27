@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -16,22 +16,22 @@ import (
 	"nhooyr.io/websocket/internal/xsync"
 )
 
-// Reader reads from the connection until there is a WebSocket
-// data message to be read. It will handle ping, pong and close frames as appropriate.
+
+
 //
-// It returns the type of the message and an io.Reader to read it.
-// The passed context will also bound the reader.
-// Ensure you read to EOF otherwise the connection will hang.
+
+
+
 //
-// Call CloseRead if you do not expect any data messages from the peer.
+
 //
-// Only one Reader may be open at a time.
+
 func (c *Conn) Reader(ctx context.Context) (MessageType, io.Reader, error) {
 	return c.reader(ctx)
 }
 
-// Read is a convenience method around Reader to read a single message
-// from the connection.
+
+
 func (c *Conn) Read(ctx context.Context) (MessageType, []byte, error) {
 	typ, r, err := c.Reader(ctx)
 	if err != nil {
@@ -42,17 +42,17 @@ func (c *Conn) Read(ctx context.Context) (MessageType, []byte, error) {
 	return typ, b, err
 }
 
-// CloseRead starts a goroutine to read from the connection until it is closed
-// or a data message is received.
+
+
 //
-// Once CloseRead is called you cannot read any messages from the connection.
-// The returned context will be cancelled when the connection is closed.
+
+
 //
-// If a data message is received, the connection will be closed with StatusPolicyViolation.
+
 //
-// Call CloseRead when you do not expect to read any more messages.
-// Since it actively reads from the connection, it will ensure that ping, pong and close
-// frames are responded to. This means c.Ping and c.Close will still work as expected.
+
+
+
 func (c *Conn) CloseRead(ctx context.Context) context.Context {
 	ctx, cancel := context.WithCancel(ctx)
 	go func() {
@@ -63,15 +63,15 @@ func (c *Conn) CloseRead(ctx context.Context) context.Context {
 	return ctx
 }
 
-// SetReadLimit sets the max number of bytes to read for a single message.
-// It applies to the Reader and Read methods.
+
+
 //
-// By default, the connection has a message read limit of 32768 bytes.
+
 //
-// When the limit is hit, the connection will be closed with StatusMessageTooBig.
+
 func (c *Conn) SetReadLimit(n int64) {
-	// We add read one more byte than the limit in case
-	// there is a fin frame that needs to be read.
+	
+	
 	c.msgReader.limitReader.limit.Store(n + 1)
 }
 
@@ -130,11 +130,11 @@ func (mr *msgReader) flateContextTakeover() bool {
 }
 
 func (c *Conn) readRSV1Illegal(h header) bool {
-	// If compression is disabled, rsv1 is illegal.
+	
 	if !c.flate() {
 		return true
 	}
-	// rsv1 is only allowed on data frames beginning messages.
+	
 	if h.opcode != opText && h.opcode != opBinary {
 		return true
 	}
@@ -162,7 +162,7 @@ func (c *Conn) readLoop(ctx context.Context) (header, error) {
 		case opClose, opPing, opPong:
 			err = c.handleControl(ctx, h)
 			if err != nil {
-				// Pass through CloseErrors when receiving a close frame.
+				
 				if h.opcode == opClose && CloseStatus(err) != -1 {
 					return header{}, err
 				}
@@ -343,7 +343,7 @@ type msgReader struct {
 	payloadLength int64
 	maskKey       uint32
 
-	// readerFunc(mr.Read) to avoid continuous allocations.
+	
 	readFunc readerFunc
 }
 
