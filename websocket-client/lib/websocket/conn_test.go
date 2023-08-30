@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket_test
 
@@ -157,7 +157,7 @@ func TestConn(t *testing.T) {
 		n1 := websocket.NetConn(tt.ctx, c1, websocket.MessageBinary)
 		n2 := websocket.NetConn(tt.ctx, c2, websocket.MessageBinary)
 
-		// Does not give any confidence but at least ensures no crashes.
+		
 		d, _ := tt.ctx.Deadline()
 		n1.SetDeadline(d)
 		n1.SetDeadline(time.Time{})
