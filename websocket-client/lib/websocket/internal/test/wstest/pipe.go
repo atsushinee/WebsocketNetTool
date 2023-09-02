@@ -1,4 +1,4 @@
-// +build !js
+
 
 package wstest
 
@@ -12,8 +12,8 @@ import (
 	"nhooyr.io/websocket"
 )
 
-// Pipe is used to create an in memory connection
-// between two websockets analogous to net.Pipe.
+
+
 func Pipe(dialOpts *websocket.DialOptions, acceptOpts *websocket.AcceptOptions) (clientConn, serverConn *websocket.Conn) {
 	tt := fakeTransport{
 		h: func(w http.ResponseWriter, r *http.Request) {
