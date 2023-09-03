@@ -1,4 +1,4 @@
-// +build !js
+
 
 package websocket
 
@@ -33,11 +33,11 @@ func (copts *compressionOptions) setHeader(h http.Header) {
 	h.Set("Sec-WebSocket-Extensions", s)
 }
 
-// These bytes are required to get flate.Reader to return.
-// They are removed when sending to avoid the overhead as
-// WebSocket framing tell's when the message has ended but then
-// we need to add them back otherwise flate.Reader keeps
-// trying to return more bytes.
+
+
+
+
+
 const deflateMessageTail = "\x00\x00\xff\xff"
 
 type trimLastFourBytesWriter struct {
@@ -63,7 +63,7 @@ func (tw *trimLastFourBytesWriter) Write(p []byte) (int, error) {
 		return len(p), nil
 	}
 
-	// Now we need to write as many extra bytes as we can from the previous tail.
+	
 	if extra > len(tw.tail) {
 		extra = len(tw.tail)
 	}
@@ -73,19 +73,19 @@ func (tw *trimLastFourBytesWriter) Write(p []byte) (int, error) {
 			return 0, err
 		}
 
-		// Shift remaining bytes in tail over.
+		
 		n := copy(tw.tail, tw.tail[extra:])
 		tw.tail = tw.tail[:n]
 	}
 
-	// If p is less than or equal to 4 bytes,
-	// all of it is is part of the tail.
+	
+	
 	if len(p) <= 4 {
 		tw.tail = append(tw.tail, p...)
 		return len(p), nil
 	}
 
-	// Otherwise, only the last 4 bytes are.
+	
 	tw.tail = append(tw.tail, p[len(p)-4:]...)
 
 	p = p[:len(p)-4]
@@ -171,7 +171,7 @@ func (sw *slidingWindow) write(p []byte) {
 
 	left := cap(sw.buf) - len(sw.buf)
 	if left < len(p) {
-		// We need to shift spaceNeeded bytes from the end to make room for p at the end.
+		
 		spaceNeeded := len(p) - left
 		copy(sw.buf, sw.buf[spaceNeeded:])
 		sw.buf = sw.buf[:len(sw.buf)-spaceNeeded]
