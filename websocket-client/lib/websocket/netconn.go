@@ -10,33 +10,33 @@ import (
 	"time"
 )
 
-// NetConn converts a *websocket.Conn into a net.Conn.
+
 //
-// It's for tunneling arbitrary protocols over WebSockets.
-// Few users of the library will need this but it's tricky to implement
-// correctly and so provided in the library.
-// See https://github.com/nhooyr/websocket/issues/100.
+
+
+
+
 //
-// Every Write to the net.Conn will correspond to a message write of
-// the given type on *websocket.Conn.
+
+
 //
-// The passed ctx bounds the lifetime of the net.Conn. If cancelled,
-// all reads and writes on the net.Conn will be cancelled.
+
+
 //
-// If a message is read that is not of the correct type, the connection
-// will be closed with StatusUnsupportedData and an error will be returned.
+
+
 //
-// Close will close the *websocket.Conn with StatusNormalClosure.
+
 //
-// When a deadline is hit, the connection will be closed. This is
-// different from most net.Conn implementations where only the
-// reading/writing goroutines are interrupted but the connection is kept alive.
+
+
+
 //
-// The Addr methods will return a mock net.Addr that returns "websocket" for Network
-// and "websocket/unknown-addr" for String.
+
+
 //
-// A received StatusNormalClosure or StatusGoingAway close frame will be translated to
-// io.EOF when reading.
+
+
 func NetConn(ctx context.Context, c *Conn, msgType MessageType) net.Conn {
 	nc := &netConn{
 		c:       c,
