@@ -6,9 +6,9 @@ var inherits = require('inherits')
   , XDRObject = require('./sender/xdr')
   ;
 
-// According to:
-//   http://stackoverflow.com/questions/1641507/detect-browser-support-for-cross-domain-xmlhttprequests
-//   http://hacks.mozilla.org/2009/07/cross-site-xmlhttprequest-with-cors/
+
+
+
 
 function XdrStreamingTransport(transUrl) {
   if (!XDRObject.enabled) {
@@ -27,6 +27,6 @@ XdrStreamingTransport.enabled = function(info) {
 };
 
 XdrStreamingTransport.transportName = 'xdr-streaming';
-XdrStreamingTransport.roundTrips = 2; // preflight, ajax
+XdrStreamingTransport.roundTrips = 2; 
 
 module.exports = XdrStreamingTransport;
