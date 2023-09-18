@@ -5,9 +5,9 @@ using System.Windows;
 
 namespace WebsocketNetTool.Base
 {
-    /// <summary>
-    /// BaseWindow.xaml
-    /// </summary>
+    
+    
+    
     public abstract partial class BaseWindow : Window
     {
     
